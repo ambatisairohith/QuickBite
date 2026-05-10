@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite - Payment</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="payment.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">⚡ QuickBite</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+        </div>
+    </nav>
+
+    <!-- Payment Container -->
+    <div class="payment-container">
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h3>🛒 Order Summary</h3>
+            <div id="orderDetails"></div>
+            <div class="total">
+                <span>Total Amount:</span>
+                <span id="totalAmount">₹0</span>
+            </div>
+        </div>
+
+        <!-- Payment Box -->
+        <div class="payment-box">
+            <h3>💳 Choose Payment Method</h3>
+
+            <!-- Payment Tabs -->
+            <div class="payment-tabs">
+                <button class="tab active" onclick="showTab('upi')">📱 UPI</button>
+                <button class="tab" onclick="showTab('card')">💳 Card</button>
+                <button class="tab" onclick="showTab('netbanking')">🏦 Net Banking</button>
+                <button class="tab" onclick="showTab('wallet')">👛 Wallet</button>
+            </div>
+
+            <!-- UPI Tab -->
+            <div id="upi" class="tab-content active">
+                <h4>Pay via UPI</h4>
+                <div class="upi-apps">
+                    <div class="upi-app" onclick="selectUPI(this)">
+                        <span>📱</span>
+                        <p>GPay</p>
+                    </div>
+                    <div class="upi-app" onclick="selectUPI(this)">
+                        <span>📱</span>
+                        <p>PhonePe</p>
+                    </div>
+                    <div class="upi-app" onclick="selectUPI(this)">
+                        <span>📱</span>
+                        <p>Paytm</p>
+                    </div>
+                    <div class="upi-app" onclick="selectUPI(this)">
+                        <span>📱</span>
+                        <p>BHIM</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Or Enter UPI ID</label>
+                    <input type="text" id="upiId" placeholder="example@upi"/>
+                </div>
+                <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+            </div>
+
+            <!-- Card Tab -->
+            <div id="card" class="tab-content">
+                <h4>Pay via Card</h4>
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="4111 1111 1111 1111" maxlength="19"/>
+                </div>
+                <div class="form-group">
+                    <label>Card Holder Name</label>
+                    <input type="text" id="cardName" placeholder="Your Name"/>
+                </div>
+                <div class="card-row">
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="text" id="expiry" placeholder="MM/YY" maxlength="5"/>
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="password" id="cvv" placeholder="123" maxlength="3"/>
+                    </div>
+                </div>
+                <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+            </div>
+
+            <!-- Net Banking Tab -->
+            <div id="netbanking" class="tab-content">
+                <h4>Pay via Net Banking</h4>
+                <div class="banks-grid">
+                    <div class="bank-card" onclick="selectBank(this)">🏦 SBI</div>
+                    <div class="bank-card" onclick="selectBank(this)">🏦 HDFC</div>
+                    <div class="bank-card" onclick="selectBank(this)">🏦 ICICI</div>
+                    <div class="bank-card" onclick="selectBank(this)">🏦 Axis</div>
+                    <div class="bank-card" onclick="selectBank(this)">🏦 Kotak</div>
+                    <div class="bank-card" onclick="selectBank(this)">🏦 PNB</div>
+                </div>
+                <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+            </div>
+
+            <!-- Wallet Tab -->
+            <div id="wallet" class="tab-content">
+                <h4>Pay via Wallet</h4>
+                <div class="banks-grid">
+                    <div class="bank-card" onclick="selectBank(this)">👛 Paytm</div>
+                    <div class="bank-card" onclick="selectBank(this)">👛 Amazon Pay</div>
+                    <div class="bank-card" onclick="selectBank(this)">👛 PhonePe</div>
+                    <div class="bank-card" onclick="selectBank(this)">👛 Mobikwik</div>
+                </div>
+                <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="popup hidden">
+        <div class="popup-box">
+            <div class="success-icon">✅</div>
+            <h2>Payment Successful!</h2>
+            <p>Your order has been placed successfully!</p>
+            <p id="transactionId"></p>
+            <button onclick="window.location.href='index.html'" 
+                class="pay-btn">Back to Home</button>
+        </div>
+    </div>
+
+    <script src="payment.js"></script>
+</body>
+</html>

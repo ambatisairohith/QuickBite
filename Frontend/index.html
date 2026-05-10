@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite - Smart Food Comparison</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">⚡ QuickBite</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="map.html">📍 Nearby</a>
+            <a href="login.html">Login</a>
+            <a href="register.html">Register</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Compare Food Prices & Quality</h1>
+        <p>One Search. Best Price. Right Bite! 🍔</p>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search for Pizza, Burger, Biryani..."/>
+            <button onclick="searchFood()">Search 🔍</button>
+        </div>
+    </div>
+
+    <!-- Popular Categories -->
+    <div class="categories">
+        <h2>Popular Categories</h2>
+        <div class="category-cards">
+            <div class="card" onclick="searchByCategory('Fast Food')">🍔 Fast Food</div>
+            <div class="card" onclick="searchByCategory('Indian')">🍛 Indian</div>
+            <div class="card" onclick="searchByCategory('Chinese')">🍜 Chinese</div>
+            <div class="card" onclick="searchByCategory('Desserts')">🍰 Desserts</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+<script>
+    // Show username if logged in
+    window.onload = function() {
+        const name = localStorage.getItem('name');
+        if (name) {
+            document.querySelector('.nav-links').innerHTML = `
+                <a href="index.html">Home</a>
+                <span style="color:white; margin-left:20px;">👤 ${name}</span>
+                <a href="#" onclick="logout()" style="margin-left:20px;">Logout</a>
+            `;
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('name');
+        window.location.href = 'index.html';
+    }
+</script>
+</body>
+</html>

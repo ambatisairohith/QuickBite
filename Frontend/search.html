@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite - Search Results</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">⚡ QuickBite</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </div>
+    </nav>
+
+    <!-- Search Bar -->
+    <div class="search-section">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search for food..."/>
+            <button onclick="searchFood()">Search 🔍</button>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section">
+        <h2 id="resultsTitle">Search Results</h2>
+        <div id="resultsContainer"></div>
+    </div>
+
+    <script src="search.js"></script>
+</body>
+</html>
