@@ -60,9 +60,26 @@ function processPayment() {
     });
 
     // Simulate payment processing
+    // Simulate payment processing
     setTimeout(() => {
         document.getElementById('transactionId').innerText = 
             `Transaction ID: ${transactionId}`;
         document.getElementById('successPopup').classList.remove('hidden');
+
+        // Save order to database
+        const userEmail = localStorage.getItem('email');
+        if (userEmail) {
+            fetch('http://localhost:8080/api/orders/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userEmail: userEmail,
+                    foodName: food,
+                    platformName: platform,
+                    price: parseFloat(amount),
+                    transactionId: transactionId
+                })
+            });
+        }
     }, 2000);
 }

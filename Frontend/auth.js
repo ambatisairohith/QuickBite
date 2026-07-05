@@ -22,9 +22,10 @@ function login() {
     .then(response => response.json())
     .then(data => {
         if (data.token) {
-            // Save token and name in browser
+            // Save token, name and email in browser
             localStorage.setItem('token', data.token);
             localStorage.setItem('name', data.name);
+            localStorage.setItem('email', document.getElementById('email').value);
             message.style.color = 'green';
             message.innerText = 'Login successful! Redirecting...';
             setTimeout(() => {

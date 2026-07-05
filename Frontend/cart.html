@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite - My Cart</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .cart-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .cart-item-info h4 {
+            font-size: 18px;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .cart-item-info p {
+            font-size: 14px;
+            color: #777;
+        }
+        .cart-item-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e23744;
+        }
+        .cart-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .remove-btn {
+            padding: 8px 16px;
+            background: #fff;
+            color: #e23744;
+            border: 2px solid #e23744;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .remove-btn:hover {
+            background: #e23744;
+            color: white;
+        }
+        .checkout-btn {
+            padding: 8px 16px;
+            background: #e23744;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .checkout-btn:hover { background: #c0392b; }
+        .cart-total {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .cart-total h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+        .cart-total span {
+            font-size: 24px;
+            font-weight: 800;
+            color: #e23744;
+        }
+        .empty-msg {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Quick<span>Bite</span> ⚡</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="wishlist.html">❤️ Wishlist</a>
+            <a href="orders.html">📋 Orders</a>
+            <a href="cart.html">🛒 Cart</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <h2 class="page-title">🛒 My Cart</h2>
+        <div id="cartContainer"></div>
+        <div id="cartTotal" class="cart-total" style="display:none;">
+            <h3>Total Amount</h3>
+            <span id="totalPrice">₹0</span>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        const userEmail = localStorage.getItem('email');
+
+        window.onload = function() {
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadCart();
+        }
+
+        function loadCart() {
+            fetch(`${API_URL}/cart/${userEmail}`)
+                .then(res => res.json())
+                .then(items => {
+                    const container = document.getElementById('cartContainer');
+                    if (items.length === 0) {
+                        container.innerHTML = '<div class="empty-msg">🛒 Your cart is empty!<br><a href="index.html" style="color:#e23744;">Browse Foods</a></div>';
+                        return;
+                    }
+
+                    let total = 0;
+                    container.innerHTML = items.map(item => {
+                        total += item.price;
+                        return `
+                            <div class="cart-item">
+                                <div class="cart-item-info">
+                                    <h4>🍽️ ${item.foodName}</h4>
+                                    <p>🏪 ${item.platformName}</p>
+                                </div>
+                                <div class="cart-item-price">₹${item.price}</div>
+                                <div class="cart-actions">
+                                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                                    <button class="checkout-btn" onclick="checkout('${item.foodName}', '${item.platformName}', ${item.price})">Order Now</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    document.getElementById('totalPrice').innerText = `₹${total}`;
+                    document.getElementById('cartTotal').style.display = 'flex';
+                });
+        }
+
+        function removeFromCart(id) {
+            fetch(`${API_URL}/cart/remove/${id}`, { method: 'DELETE' })
+                .then(() => loadCart());
+        }
+
+        function checkout(food, platform, price) {
+            window.location.href = `payment.html?food=${food}&platform=${platform}&amount=${price}`;
+        }
+    </script>
+</body>
+</html>

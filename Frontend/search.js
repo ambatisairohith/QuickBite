@@ -114,9 +114,19 @@ function displayComparison(data) {
                     🚚 ${p.deliveryTime} mins ${p.deliveryTime === bestDelivery ? '✅ Fastest' : ''}
                 </p>
                 <p>🎉 ${p.discount}</p>
-                <a href="payment.html?amount=${p.price}&platform=${p.platform.name}&food=${group.food.name}" class="order-btn">
-    Order on ${p.platform.name}
-</a>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:15px;">
+    <a href="payment.html?amount=${p.price}&platform=${p.platform.name}&food=${group.food.name}" class="order-btn">
+        Order on ${p.platform.name}
+    </a>
+    <button onclick="addToCart('${group.food.name}', '${p.platform.name}', ${p.price})" 
+        style="padding:8px; background:white; color:#e23744; border:2px solid #e23744; border-radius:8px; cursor:pointer; font-weight:600;">
+        🛒 Add to Cart
+    </button>
+    <button onclick="addToWishlist('${group.food.name}')" 
+        style="padding:8px; background:white; color:#e23744; border:2px solid #e23744; border-radius:8px; cursor:pointer; font-weight:600;">
+        ❤️ Wishlist
+    </button>
+</div>
             </div>
         `).join('');
 
@@ -139,4 +149,46 @@ function searchFood() {
         return;
     }
     window.location.href = `search.html?name=${query}`;
+}
+
+
+
+// Add to Cart
+function addToCart(foodName, platformName, price) {
+    const userEmail = localStorage.getItem('email');
+    if (!userEmail) {
+        alert('Please login first!');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    fetch('http://localhost:8080/api/cart/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail, foodName, platformName, price })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert('✅ Added to Cart!');
+    });
+}
+
+// Add to Wishlist
+function addToWishlist(foodName) {
+    const userEmail = localStorage.getItem('email');
+    if (!userEmail) {
+        alert('Please login first!');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    fetch('http://localhost:8080/api/wishlist/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail, foodName })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert('❤️ ' + data.message);
+    });
 }

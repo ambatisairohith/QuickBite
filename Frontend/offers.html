@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite - Offers</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .offers-page {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .offer-banner {
+            border-radius: 20px;
+            padding: 35px;
+            color: white;
+            margin-bottom: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .offer-banner.red { background: linear-gradient(135deg, #e23744, #ff6b6b); }
+        .offer-banner.orange { background: linear-gradient(135deg, #ff8c00, #ffa500); }
+        .offer-banner.green { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .offer-banner.blue { background: linear-gradient(135deg, #2980b9, #3498db); }
+        .offer-banner h2 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+        .offer-banner p { font-size: 16px; opacity: 0.9; }
+        .offer-badge {
+            background: rgba(255,255,255,0.3);
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+        .foods-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .offer-food-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            transition: transform 0.2s;
+        }
+        .offer-food-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .offer-food-info h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .offer-food-info p {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 3px;
+        }
+        .offer-food-price {
+            text-align: right;
+        }
+        .original-price {
+            font-size: 14px;
+            color: #999;
+            text-decoration: line-through;
+        }
+        .discounted-price {
+            font-size: 22px;
+            font-weight: 800;
+            color: #e23744;
+        }
+        .discount-badge {
+            background: #e8f5e9;
+            color: #27ae60;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .offer-order-btn {
+            padding: 10px 20px;
+            background: #e23744;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .offer-order-btn:hover { background: #c0392b; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Quick<span>Bite</span> ⚡</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="wishlist.html">❤️ Wishlist</a>
+            <a href="orders.html">📋 Orders</a>
+            <a href="cart.html">🛒 Cart</a>
+        </div>
+    </nav>
+
+    <div class="offers-page">
+        <!-- Offer Banner -->
+        <div id="offerBanner"></div>
+
+        <!-- Food Items -->
+        <h3 class="foods-title">🍽️ Foods Available in this Offer</h3>
+        <div id="offerFoods"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        const urlParams = new URLSearchParams(window.location.search);
+        const offer = urlParams.get('offer');
+
+        // Offer details
+        const offerDetails = {
+            swiggy50: {
+                title: '50% OFF',
+                desc: 'On your first order via Swiggy',
+                platform: 'Swiggy',
+                discount: 50,
+                color: 'red',
+                badge: '🔥 50% OFF'
+            },
+            zomatofree: {
+                title: 'Free Delivery',
+                desc: 'On orders above ₹199 on Zomato',
+                platform: 'Zomato',
+                discount: 0,
+                color: 'orange',
+                badge: '🚚 FREE'
+            },
+            dominos: {
+                title: 'Buy 1 Get 1',
+                desc: 'On Dominos pizzas every Tuesday',
+                platform: 'Dominos',
+                discount: 50,
+                color: 'green',
+                badge: '🍕 B1G1'
+            },
+            cashback: {
+                title: '20% Cashback',
+                desc: 'On UPI payments via PhonePe',
+                platform: 'All',
+                discount: 20,
+                color: 'blue',
+                badge: '💰 20% BACK'
+            }
+        };
+
+        window.onload = function() {
+            const details = offerDetails[offer];
+            if (!details) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Show banner
+            document.getElementById('offerBanner').innerHTML = `
+                <div class="offer-banner ${details.color}">
+                    <div>
+                        <h2>${details.title}</h2>
+                        <p>${details.desc}</p>
+                    </div>
+                    <div class="offer-badge">${details.badge}</div>
+                </div>
+            `;
+
+            // Load foods
+            loadOfferFoods(details);
+        }
+
+        function loadOfferFoods(details) {
+            fetch(`${API_URL}/compare/search?name=`)
+                .then(res => res.json())
+                .then(data => {
+                    // Filter by platform if needed
+                    let filtered = data;
+                    if (details.platform !== 'All') {
+                        filtered = data.filter(item =>
+                            item.platform.name === details.platform);
+                    }
+
+                    if (filtered.length === 0) {
+                        fetch(`${API_URL}/foods`)
+                            .then(res => res.json())
+                            .then(foods => displayFoods(foods, details));
+                        return;
+                    }
+
+                    displayPlatformFoods(filtered, details);
+                });
+        }
+
+        function displayPlatformFoods(items, details) {
+            const container = document.getElementById('offerFoods');
+            container.innerHTML = items.map(item => {
+                const originalPrice = item.price;
+                const discountedPrice = details.discount > 0
+                    ? Math.round(originalPrice * (1 - details.discount/100))
+                    : originalPrice;
+
+                return `
+                    <div class="offer-food-card">
+                        <div class="offer-food-info">
+                            <h4>🍽️ ${item.food.name}</h4>
+                            <p>🏪 ${item.platform.name}</p>
+                            <p>⭐ ${item.rating} | 🚚 ${item.deliveryTime} mins</p>
+                            <span class="discount-badge">${item.discount}</span>
+                        </div>
+                        <div class="offer-food-price">
+                            ${details.discount > 0 ? `<div class="original-price">₹${originalPrice}</div>` : ''}
+                            <div class="discounted-price">₹${discountedPrice}</div>
+                            ${details.discount > 0 ? `<div class="discount-badge">You save ₹${originalPrice - discountedPrice}!</div>` : ''}
+                        </div>
+                        <button class="offer-order-btn"
+                            onclick="window.location.href='payment.html?amount=${discountedPrice}&platform=${item.platform.name}&food=${item.food.name}'">
+                            Order Now
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function displayFoods(foods, details) {
+            const container = document.getElementById('offerFoods');
+            container.innerHTML = foods.map(food => `
+                <div class="offer-food-card">
+                    <div class="offer-food-info">
+                        <h4>🍽️ ${food.name}</h4>
+                        <p>📁 ${food.category}</p>
+                        <p>${food.description}</p>
+                    </div>
+                    <button class="offer-order-btn"
+                        onclick="window.location.href='search.html?name=${food.name}'">
+                        Compare & Order
+                    </button>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

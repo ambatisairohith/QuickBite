@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite - My Orders</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .order-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .order-info h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .order-info p {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 3px;
+        }
+        .order-price {
+            font-size: 22px;
+            font-weight: 800;
+            color: #e23744;
+        }
+        .order-status {
+            background: #e8f5e9;
+            color: #27ae60;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .transaction-id {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        .empty-msg {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+            font-size: 18px;
+        }
+        .reorder-btn {
+            padding: 8px 16px;
+            background: #e23744;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .reorder-btn:hover { background: #c0392b; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Quick<span>Bite</span> ⚡</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="wishlist.html">❤️ Wishlist</a>
+            <a href="orders.html">📋 Orders</a>
+            <a href="cart.html">🛒 Cart</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <h2 class="page-title">📋 My Orders</h2>
+        <div id="ordersContainer"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        const userEmail = localStorage.getItem('email');
+
+        window.onload = function() {
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadOrders();
+        }
+
+        function loadOrders() {
+            fetch(`${API_URL}/orders/${userEmail}`)
+                .then(res => res.json())
+                .then(orders => {
+                    const container = document.getElementById('ordersContainer');
+                    if (orders.length === 0) {
+                        container.innerHTML = '<div class="empty-msg">📋 No orders yet!<br><a href="index.html" style="color:#e23744;">Order Now</a></div>';
+                        return;
+                    }
+
+                    container.innerHTML = orders.map(order => `
+                        <div class="order-card">
+                            <div class="order-info">
+                                <h4>🍽️ ${order.foodName}</h4>
+                                <p>🏪 ${order.platformName}</p>
+                                <p>📅 ${new Date(order.createdAt).toLocaleDateString()}</p>
+                                <p class="transaction-id">Transaction: ${order.transactionId}</p>
+                            </div>
+                            <div>
+                                <div class="order-price">₹${order.price}</div>
+                                <div class="order-status">✅ ${order.status}</div>
+                            </div>
+                            <button class="reorder-btn" 
+                                onclick="window.location.href='search.html?name=${order.foodName}'">
+                                🔄 Reorder
+                            </button>
+                        </div>
+                    `).join('');
+                });
+        }
+    </script>
+</body>
+</html>
