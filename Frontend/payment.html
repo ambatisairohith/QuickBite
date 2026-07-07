@@ -124,14 +124,19 @@
     </div>
 
     <!-- Success Popup -->
+    <!-- Success Popup -->
     <div id="successPopup" class="popup hidden">
         <div class="popup-box">
             <div class="success-icon">✅</div>
             <h2>Payment Successful!</h2>
             <p>Your order has been placed successfully!</p>
             <p id="transactionId"></p>
+            <button onclick="goToTracking()" 
+                class="pay-btn">Track My Order 🚚</button>
             <button onclick="window.location.href='index.html'" 
-                class="pay-btn">Back to Home</button>
+                style="width:100%; padding:10px; background:white; color:#e23744; border:2px solid #e23744; border-radius:8px; cursor:pointer; font-weight:600; margin-top:10px;">
+                Back to Home
+            </button>
         </div>
     </div>
 

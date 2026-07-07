@@ -47,13 +47,12 @@ function selectBank(element) {
 }
 
 // Process Payment
+// Process Payment
 function processPayment() {
-    // Generate random transaction ID
     const transactionId = 'QB' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
-    // Show processing
-    const payBtns = document.querySelectorAll('.pay-btn');
-    payBtns.forEach(btn => {
+    // Hide only payment tab buttons
+    document.querySelectorAll('.tab-content .pay-btn').forEach(btn => {
         btn.innerText = 'Processing...';
         btn.disabled = true;
         btn.style.display = 'none';
@@ -82,4 +81,11 @@ function processPayment() {
             });
         }
     }, 2000);
+}
+
+// Go to tracking page
+function goToTracking() {
+    const tidText = document.getElementById('transactionId').innerText;
+    const tid = tidText.replace('Transaction ID: ', '');
+    window.location.href = `tracking.html?food=${food}&platform=${platform}&price=${amount}&tid=${tid}`;
 }

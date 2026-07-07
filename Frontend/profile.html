@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite - My Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #e23744, #ff6b6b);
+            border-radius: 20px;
+            padding: 35px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            flex-shrink: 0;
+        }
+        .profile-info h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        .profile-info p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .stat-card .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #e23744;
+            margin-bottom: 5px;
+        }
+        .stat-card p {
+            font-size: 14px;
+            color: #777;
+        }
+        .profile-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .profile-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+        .field-label {
+            font-size: 14px;
+            color: #777;
+            font-weight: 600;
+        }
+        .field-value {
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+        .edit-btn {
+            padding: 10px 25px;
+            background: #e23744;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .edit-btn:hover { background: #c0392b; }
+        .logout-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            color: #e23744;
+            border: 2px solid #e23744;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .logout-btn:hover {
+            background: #e23744;
+            color: white;
+        }
+        .recent-order {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .recent-order:last-child { border-bottom: none; }
+        .recent-order h4 { font-size: 15px; font-weight: 700; color: #333; }
+        .recent-order p { font-size: 13px; color: #777; }
+        .recent-order span {
+            font-size: 16px;
+            font-weight: 700;
+            color: #e23744;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Quick<span>Bite</span> ⚡</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="wishlist.html">❤️ Wishlist</a>
+            <a href="orders.html">📋 Orders</a>
+            <a href="cart.html">🛒 Cart</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-avatar">👤</div>
+            <div class="profile-info">
+                <h2 id="profileName">Loading...</h2>
+                <p id="profileEmail">Loading...</p>
+                <p>🍔 QuickBite Member</p>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="profile-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalOrders">0</div>
+                <p>Total Orders</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalWishlist">0</div>
+                <p>Wishlist Items</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalSpent">₹0</div>
+                <p>Total Spent</p>
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="profile-section">
+            <h3>👤 Personal Information</h3>
+            <div class="profile-field">
+                <span class="field-label">Full Name</span>
+                <span class="field-value" id="detailName">-</span>
+            </div>
+            <div class="profile-field">
+                <span class="field-label">Email</span>
+                <span class="field-value" id="detailEmail">-</span>
+            </div>
+            <div class="profile-field">
+                <span class="field-label">Member Since</span>
+                <span class="field-value" id="memberSince">-</span>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="profile-section">
+            <h3>📋 Recent Orders</h3>
+            <div id="recentOrders">
+                <p style="color:#999; text-align:center;">No orders yet!</p>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="profile-section">
+            <h3>⚙️ Account Actions</h3>
+            <button class="edit-btn" onclick="window.location.href='orders.html'">
+                📋 View All Orders
+            </button>
+            <button class="edit-btn" onclick="window.location.href='wishlist.html'" 
+                style="margin-left:10px;">
+                ❤️ My Wishlist
+            </button>
+            <br>
+            <button class="logout-btn" onclick="logout()">
+                🚪 Logout
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        const userEmail = localStorage.getItem('email');
+        const userName = localStorage.getItem('name');
+
+        window.onload = function() {
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Show profile info
+            document.getElementById('profileName').innerText = userName;
+            document.getElementById('profileEmail').innerText = userEmail;
+            document.getElementById('detailName').innerText = userName;
+            document.getElementById('detailEmail').innerText = userEmail;
+            document.getElementById('memberSince').innerText = 
+                new Date().toLocaleDateString('en-IN', {year:'numeric', month:'long'});
+
+            // Load orders
+            fetch(`${API_URL}/orders/${userEmail}`)
+                .then(res => res.json())
+                .then(orders => {
+                    document.getElementById('totalOrders').innerText = orders.length;
+                    let totalSpent = orders.reduce((sum, o) => sum + o.price, 0);
+                    document.getElementById('totalSpent').innerText = '₹' + totalSpent;
+
+                    if (orders.length > 0) {
+                        document.getElementById('recentOrders').innerHTML =
+                            orders.slice(0, 3).map(order => `
+                                <div class="recent-order">
+                                    <div>
+                                        <h4>🍽️ ${order.foodName}</h4>
+                                        <p>🏪 ${order.platformName}</p>
+                                    </div>
+                                    <span>₹${order.price}</span>
+                                </div>
+                            `).join('');
+                    }
+                });
+
+            // Load wishlist count
+            fetch(`${API_URL}/wishlist/${userEmail}`)
+                .then(res => res.json())
+                .then(items => {
+                    document.getElementById('totalWishlist').innerText = items.length;
+                });
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('name');
+            localStorage.removeItem('email');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
