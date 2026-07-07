@@ -12,7 +12,13 @@
 
 ## 🚀 About QuickBite
 
-QuickBite is an AI-powered full-stack web application that allows users to search any food item and instantly compare prices, quality ratings, and delivery times across multiple food platforms like **Swiggy, Zomato, Dominos, Pizza Hut, KFC, McDonalds and Subway** — all in one place!
+## 🚀 About QuickBite
+
+QuickBite is an AI-powered full-stack web application built to solve a real problem — instead of opening multiple food apps to compare prices, users can search any dish on QuickBite and instantly see prices, ratings, delivery times and offers from **Swiggy, Zomato, Dominos, Pizza Hut, KFC, McDonalds and Subway** — all in one place!
+
+The platform features a smart AI recommendation engine that scores each platform out of 100 based on price, rating and delivery time, helping users make the best food ordering decision in seconds.
+
+Built with **Java Spring Boot, MySQL and HTML/CSS/JavaScript** as a placement project to demonstrate full-stack development, REST API design, JWT authentication, and AI integration skills.
 
 ---
 
